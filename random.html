@@ -4,17 +4,25 @@
     <meta charset="UTF-8">
     <title>Document</title>
     <style>
-        #state{
+        #state {
             text-align: center;
             font-size: 20px;
             font-weight: 700;
         }
-        input{
+
+        input.in {
             width: 100%;
             min-height: 34px;
             margin: 15px 0;
         }
-        button{
+
+        input.num {
+            width: 100px;
+            height: 34px;
+            text-align: center;
+        }
+
+        button {
             width: 100px;
             height: 34px;
             line-height: 34px;
@@ -26,38 +34,50 @@
 
             outline: none;
         }
-        button:hover{
+
+        button:hover {
             background-color: #ccd500;
         }
 
-        div{
+        div {
             min-height: 30px;
             border: 1px solid #eee;
             margin: 15px 0;
             line-height: 3;
         }
+        #show div{
+            margin: 3px 0;
+            height: 20px;
+            line-height: 30px;
+            padding-left: 78px;
+            color: #f00;
+            border: 1px solid pink;
+        }
     </style>
 </head>
 <body>
 <div id="state"> 说明：输入框中输入需要随机人员，只能用英文逗号或者中文逗号（二选一）分隔</div>
-<input type="text" name="">
+<input type="text" class="in">
 <br>
 <button id="make">确认名单</button>
 <div id="all">名单有：</div>
-<button id="random">随机</button>
+<button id="random">抽取</button>
+<input type="text" class="num" placeholder="抽取数量">
 <br>
-<div id="show">随机产生人员：</div>
+<div id="show">抽取人员：</div>
 <script type="text/javascript">
-    var names = document.querySelector('input');
+    var names = document.querySelector('.in');
     var _all = document.querySelector('#all');
-    var _div = document.querySelector('#show');
+    var _show = document.querySelector('#show');
     var make = document.querySelector('#make');
+    var _times = document.querySelector('.num');
     var random = document.querySelector('#random');
-    var arr = [];
+    var arr = [];// 所有的数组
+
     make.onclick = function () {
         // 重置
         _all.innerText = '名单有：';
-        _div.innerText= '随机产生人员：';
+        _show.innerHTML = '抽取人员：';
         // 判断是中文还是英文逗号分隔符
         var str = names.value.indexOf('，') > -1 ? '，' : ',';
 
@@ -73,12 +93,16 @@
         _all.innerText = _all.innerText + ' ' + arr.join('   ');
     }
     random.onclick = function () {
-        var len = arr.length;
-        if (!len) return false
-        var inx = Math.floor(Math.random() * len);
-        var txt = arr.splice(inx, 1);
-        _div.innerText = _div.innerText + ' ' + txt;
 
+        times = _times.value - 0;
+        if (times > arr.length) {
+            alert('未被抽取名单数量小于零输入的数量，请重新输入，或者重新确认名单')
+            return false
+        }
+        for (var i = 0; i < times; i++) {
+            var txts = "  " + getRandomOne();
+            creatDiv(txts)
+        }
     }
 
     // 排除空格
@@ -87,7 +111,21 @@
             const v = item.replace(/(^\s*)|(\s*$)/g, ""); // 去除收尾空格
             if (!!v) return item
         })
+    }
 
+    // 产生随机元素
+    function getRandomOne() {
+        var len = arr.length;
+        if (!arr || len <= 0) return false;
+        var inx = Math.floor(Math.random() * len);
+        return arr.splice(inx, 1);
+    }
+
+    // 创建div
+    function creatDiv(txt) {
+        var cDiv = document.createElement('div');
+        cDiv.innerHTML = txt;
+        _show.appendChild(cDiv)
     }
 
 
