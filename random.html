@@ -45,7 +45,8 @@
             margin: 15px 0;
             line-height: 3;
         }
-        #show div{
+
+        #show div {
             margin: 3px 0;
             height: 20px;
             line-height: 30px;
@@ -87,14 +88,16 @@
         * deleteBlank 函数将每个元素首尾空格去掉，以及空格元素去掉
         *
         * */
-
         arr = deleteBlank(Array.from(new Set(brr)));
 
         _all.innerText = _all.innerText + ' ' + arr.join('   ');
     }
     random.onclick = function () {
-
-        times = _times.value - 0;
+        times = _times.value - 0; // 隐式转换为数字
+        if (!Number.isInteger(times) || times <= 0) {
+            alert('请输入有效数字')
+            return false
+        }
         if (times > arr.length) {
             alert('未被抽取名单数量小于零输入的数量，请重新输入，或者重新确认名单')
             return false
