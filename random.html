@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        #state{
+            text-align: center;
+            font-size: 20px;
+            font-weight: 700;
+        }
+        input{
+            width: 100%;
+            min-height: 34px;
+            margin: 15px 0;
+        }
+        button{
+            width: 100px;
+            height: 34px;
+            line-height: 34px;
+            color: #333;
+            cursor: pointer;
+            background-color: #ccc;
+            border: none;
+            border-radius: 15px;
+
+            outline: none;
+        }
+        button:hover{
+            background-color: #ccd500;
+        }
+
+        div{
+            min-height: 30px;
+            border: 1px solid #eee;
+            margin: 15px 0;
+            line-height: 3;
+        }
+    </style>
+</head>
+<body>
+<div id="state"> 说明：输入框中输入需要随机人员，只能用英文逗号或者中文逗号（二选一）分隔</div>
+<input type="text" name="">
+<br>
+<button id="make">确认名单</button>
+<div id="all">名单有：</div>
+<button id="random">随机</button>
+<br>
+<div id="show">随机产生人员：</div>
+<script type="text/javascript">
+    var names = document.querySelector('input');
+    var _all = document.querySelector('#all');
+    var _div = document.querySelector('#show');
+    var make = document.querySelector('#make');
+    var random = document.querySelector('#random');
+    var arr = [];
+    make.onclick = function () {
+        // 重置
+        _all.innerText = '名单有：';
+        _div.innerText= '随机产生人员：';
+        // 判断是中文还是英文逗号分隔符
+        var str = names.value.indexOf('，') > -1 ? '，' : ',';
+
+        var brr = names.value.split(str);
+        /*
+        * new Set ES6去重，转换为对象了，再用Array.from转换为数组
+        * deleteBlank 函数将每个元素首尾空格去掉，以及空格元素去掉
+        *
+        * */
+
+        arr = deleteBlank(Array.from(new Set(brr)));
+
+        _all.innerText = _all.innerText + ' ' + arr.join('   ');
+    }
+    random.onclick = function () {
+        var len = arr.length;
+        if (!len) return false
+        var inx = Math.floor(Math.random() * len);
+        var txt = arr.splice(inx, 1);
+        _div.innerText = _div.innerText + ' ' + txt;
+
+    }
+
+    // 排除空格
+    function deleteBlank(arrs) {
+        return Object.values(arrs).filter(function (item) { // 获取数组所有的值
+            const v = item.replace(/(^\s*)|(\s*$)/g, ""); // 去除收尾空格
+            if (!!v) return item
+        })
+
+    }
+
+
+</script>
+
+</body>
+</html>
